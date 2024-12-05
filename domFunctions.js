@@ -1,4 +1,5 @@
 import { getTodos } from "./functions.js";
+import { todoList } from "./index.js";
 
 function createTodoHTMLString(todo) {
   let todoClasses = "todo";
@@ -33,20 +34,25 @@ export function insertTodosToElement(element, todos) {
 }
 
 export async function markTodo(todoEl) {
-  todoEl.classList.toggle("done");
   const todosLS = await getTodos();
 
   const updatedTodos = todosLS.map((todo) => {
-    console.log(todo.id, todoEl.id);
-
-    if (todo.id === parseInt(todoEl.id)) {
+    if (todo.id == todoEl.id) {
       return { ...todo, completed: !todo.completed };
     }
 
     return todo;
   });
 
-  console.log(updatedTodos);
-
   localStorage.setItem("todos", JSON.stringify(updatedTodos));
+  insertTodosToElement(todoList, updatedTodos);
+}
+
+export async function removeTodo(targetEl) {
+  const todo = targetEl.closest(".todo");
+  const id = todo.id;
+  const todosLS = await getTodos();
+  const filteredTodos = todosLS.filter((todo) => todo.id != id);
+  localStorage.setItem("todos", JSON.stringify(filteredTodos));
+  insertTodosToElement(todoList, filteredTodos);
 }

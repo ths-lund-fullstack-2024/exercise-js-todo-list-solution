@@ -22,9 +22,27 @@ body {
   padding-block: 2rem;
 }
 
-main h1 {
-  margin-bottom: 2rem;
-  text-align: center;
+main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  width: 400px;
+}
+
+.form input {
+  flex: 1;
+}
+
+.form input,
+.form .btn {
+  color: black;
 }
 
 .todo-list {
