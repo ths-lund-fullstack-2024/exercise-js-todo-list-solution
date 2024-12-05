@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url("./loader.css");
+
+* {
+  box-sizing: border-box;
+  color: whitesmoke;
+  font-family: "Roboto", serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* ::root */
+html {
+  --bg-color: #282b30;
+  --bg-color-light: #36393e;
+  --bg-color-light-hover: #424549;
+  --main-color: #7289da;
+}
+
+body {
+  background-color: var(--bg-color);
+  padding-block: 2rem;
+}
+
+main h1 {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.todo-list {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.todo {
+  align-items: center;
+  background-color: var(--bg-color-light);
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  width: 400px;
+}
+
+.todo.done .title {
+  text-decoration: line-through;
+}
+
+.todo:hover {
+  background-color: var(--bg-color-light-hover);
+}
+
+.todo .actions {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+}
+
+.todo .actions .icon:hover {
+  color: var(--main-color);
+}
+
+.todo .actions .move {
+  display: flex;
+  flex-direction: column;
+}
