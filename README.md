@@ -1,1 +1,1 @@
-# exercise-js-todo-list-solution
+# Todo List - Lösningsförslag THS
