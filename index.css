@@ -84,6 +84,14 @@ main {
   width: 400px;
 }
 
+.todo:first-child .actions .move .move-up {
+  visibility: hidden;
+}
+
+.todo:last-child .actions .move .move-down {
+  visibility: hidden;
+}
+
 .todo.done .title {
   text-decoration: line-through;
 }

@@ -32,23 +32,23 @@ function createTodoHTMLString(todo) {
   if (todo.completed) todoClasses += " done";
 
   return /*html*/ `
-        <article class="${todoClasses}" id="${todo.id}">
-            <div class="title">${todo.title}</div>
-            <div class="actions">
-                <span class="delete icon material-symbols-outlined">
-                    delete
-                </span>
-                <div class="move">
-                    <span class="move-up icon material-symbols-outlined">
-                        keyboard_double_arrow_up
-                    </span>
-                    <span class="move-down icon material-symbols-outlined">
-                        keyboard_double_arrow_down
-                    </span>
-                </div>
-            </div>
-        </article>
-    `;
+    <article class="${todoClasses}" id="${todo.id}">
+      <div class="title">${todo.title}</div>
+      <div class="actions">
+        <span class="delete icon material-symbols-outlined">
+            delete
+        </span>
+        <div class="move">
+          <span class="move-up icon material-symbols-outlined">
+            keyboard_double_arrow_up
+          </span>
+          <span class="move-down icon material-symbols-outlined">
+            keyboard_double_arrow_down
+          </span>
+        </div>
+      </div>
+    </article>
+  `;
 }
 
 export function insertTodos(element, todos) {
@@ -59,11 +59,9 @@ export function insertTodos(element, todos) {
   element.innerHTML = todosHTMLString;
 }
 
-export async function markTodo(todoEl) {
-  const todosLS = await getTodos();
-
-  const updatedTodos = todosLS.map((todo) => {
-    if (todo.id == todoEl.id) {
+export function markTodo(todoToMark, todos) {
+  const updatedTodos = todos.map((todo) => {
+    if (todo.id == todoToMark.id) {
       return { ...todo, completed: !todo.completed };
     }
 
@@ -71,18 +69,27 @@ export async function markTodo(todoEl) {
   });
 
   saveTodos(updatedTodos);
-  insertTodos(todoList, updatedTodos);
 }
 
-export async function removeTodo(targetEl) {
-  const todo = targetEl.closest(".todo");
-  const id = todo.id;
-  const todosLS = await getTodos();
-  const filteredTodos = todosLS.filter((todo) => todo.id != id);
+export function moveTodo(todoToMove, todos, direction) {
+  const index = todos.findIndex((todo) => todo.id == todoToMove.id);
+
+  if (direction === "UP" && index > 0)
+    [todos[index - 1], todos[index]] = [todos[index], todos[index - 1]];
+
+  if (direction === "DOWN" && index < todos.length - 1)
+    [todos[index], todos[index + 1]] = [todos[index + 1], todos[index]];
+
+  saveTodos(todos);
+}
+
+export function removeTodo(todoToRemove, todos) {
+  const id = todoToRemove.id;
+  const filteredTodos = todos.filter((todo) => todo.id != id);
   saveTodos(filteredTodos);
-  insertTodos(todoList, filteredTodos);
 }
 
 export function saveTodos(todos) {
   localStorage.setItem("todos", JSON.stringify(todos));
+  insertTodos(todoList, todos);
 }

@@ -4,18 +4,25 @@ import {
   getTodos,
   insertTodos,
   markTodo,
+  moveTodo,
   removeTodo,
   saveTodos,
 } from "./utils.js";
 
-export function handleOnClick({ target }) {
-  if (target.classList.contains("todo")) markTodo(target);
-  if (target.classList.contains("delete")) removeTodo(target);
+export async function handleOnClick({ target }) {
+  const todo = target.closest(".todo");
+  const todos = await getTodos();
+  const { classList } = target;
+
+  if (classList.contains("delete")) removeTodo(todo, todos);
+  if (classList.contains("move-down")) moveTodo(todo, todos, "DOWN");
+  if (classList.contains("move-up")) moveTodo(todo, todos, "UP");
+  if (classList.contains("todo")) markTodo(todo, todos);
 }
 
 export async function handleOnInput({ target }) {
-  const todosLS = await getTodos();
-  const todoAlreadyExist = todosLS.some((todo) => todo.title === target.value);
+  const todos = await getTodos();
+  const todoAlreadyExist = todos.some((todo) => todo.title === target.value);
 
   todoAlreadyExist || !target.value
     ? submitBtn.setAttribute("disabled", "true")
@@ -36,8 +43,8 @@ export async function handleOnSubmit(event) {
     userId: 1,
   };
 
-  const todosLS = await getTodos();
-  const updatedTods = [newTodo, ...todosLS];
+  const todos = await getTodos();
+  const updatedTods = [newTodo, ...todos];
   saveTodos(updatedTods);
   insertTodos(todoList, updatedTods);
   event.target.reset();
