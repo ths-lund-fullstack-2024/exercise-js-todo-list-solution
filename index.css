@@ -37,12 +37,32 @@ main {
 }
 
 .form input {
+  color: black;
   flex: 1;
+  padding-inline: 1rem;
+}
+
+.form input:focus-visible {
+  outline: var(--main-color) auto 1px;
+}
+
+.form .btn {
+  background-color: var(--main-color);
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+}
+
+.form .btn:disabled {
+  background-color: gray;
+  color: lightgrey;
+  cursor: not-allowed;
 }
 
 .form input,
 .form .btn {
-  color: black;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
 }
 
 .todo-list {

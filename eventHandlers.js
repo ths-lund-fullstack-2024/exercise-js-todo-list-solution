@@ -1,4 +1,4 @@
-import { todoList } from "./index.js";
+import { submitBtn, todoList } from "./index.js";
 
 import {
   getTodos,
@@ -13,14 +13,25 @@ export function handleOnClick({ target }) {
   if (target.classList.contains("delete")) removeTodo(target);
 }
 
+export async function handleOnInput({ target }) {
+  const todosLS = await getTodos();
+  const todoAlreadyExist = todosLS.some((todo) => todo.title === target.value);
+
+  todoAlreadyExist || !target.value
+    ? submitBtn.setAttribute("disabled", "true")
+    : submitBtn.removeAttribute("disabled");
+}
+
 export async function handleOnSubmit(event) {
   event.preventDefault();
   const { elements } = event.target;
-  const value = elements.todoInput.value; // Check this one out, why is "elements" present on the target here.
+  const value = elements.todoInput.value;
+
+  if (!value) return;
 
   const newTodo = {
     completed: false,
-    id: crypto.randomUUID(), // crypto exists on the BOM object
+    id: crypto.randomUUID(),
     title: value,
     userId: 1,
   };
@@ -29,4 +40,6 @@ export async function handleOnSubmit(event) {
   const updatedTods = [newTodo, ...todosLS];
   saveTodos(updatedTods);
   insertTodos(todoList, updatedTods);
+  event.target.reset();
+  submitBtn.setAttribute("disabled", "true");
 }
