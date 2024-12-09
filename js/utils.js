@@ -4,7 +4,15 @@ async function getDummyTodos() {
   try {
     const res = await fetch("http://jsonplaceholder.typicode.com/todos");
     const todos = await res.json();
-    return todos.slice(1, 4);
+    let slicedTodos = todos.slice(1, 4);
+
+    slicedTodos = slicedTodos.map((t) => ({
+      ...t,
+      author: "Anon",
+      timestamp: new Date().toLocaleString(),
+    }));
+
+    return slicedTodos;
   } catch (error) {
     return {
       error: "Something went wrong with your request",
@@ -47,6 +55,10 @@ function createTodoHTMLString(todo) {
           </span>
         </div>
       </div>
+      <div class="meta">
+        <p class="author"><em>${todo.author}</em></p>
+        <p class="timestamp"><em>${todo.timestamp}</em></p>
+      </div>
     </article>
   `;
 }
@@ -55,6 +67,8 @@ export function insertTodos(element, todos) {
   const todosHTMLString = todos
     .map((todo) => createTodoHTMLString(todo))
     .join("");
+
+  if (!todosHTMLString) return (element.innerText = "No Todos here...");
 
   element.innerHTML = todosHTMLString;
 }

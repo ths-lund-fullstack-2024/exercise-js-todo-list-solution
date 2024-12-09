@@ -7,7 +7,6 @@ import {
 import { getTodos, insertTodos } from "./utils.js";
 
 const form = document.querySelector(".form");
-export const submitBtn = document.querySelector(".btn");
 export const todoList = document.querySelector(".todo-list");
 
 form.addEventListener("input", handleOnInput);

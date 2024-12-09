@@ -1,4 +1,4 @@
-import { submitBtn, todoList } from "./index.js";
+import { todoList } from "./index.js";
 
 import {
   getTodos,
@@ -9,37 +9,47 @@ import {
   saveTodos,
 } from "./utils.js";
 
+const submitBtn = document.querySelector(".btn");
+const todoInput = document.querySelector('input[name="todoInput"]');
+const authorInput = document.querySelector('input[name="authorInput"]');
+
 export async function handleOnClick({ target }) {
   const todo = target.closest(".todo");
   const todos = await getTodos();
   const { classList } = target;
 
-  if (classList.contains("delete")) removeTodo(todo, todos);
-  if (classList.contains("move-down")) moveTodo(todo, todos, "DOWN");
-  if (classList.contains("move-up")) moveTodo(todo, todos, "UP");
-  if (classList.contains("todo")) markTodo(todo, todos);
+  if (classList.contains("delete")) return removeTodo(todo, todos);
+  if (classList.contains("move-down")) return moveTodo(todo, todos, "DOWN");
+  if (classList.contains("move-up")) return moveTodo(todo, todos, "UP");
+  return markTodo(todo, todos);
 }
 
-export async function handleOnInput({ target }) {
+export async function handleOnInput() {
   const todos = await getTodos();
-  const todoAlreadyExist = todos.some((todo) => todo.title === target.value);
+  const todoValue = todoInput.value;
+  const authorValue = authorInput.value;
 
-  todoAlreadyExist || !target.value
+  const todoAlreadyExist = todos.some(
+    (t) => t.title === todoValue && t.author === authorValue
+  );
+
+  todoAlreadyExist || !todoValue
     ? submitBtn.setAttribute("disabled", "true")
     : submitBtn.removeAttribute("disabled");
 }
 
 export async function handleOnSubmit(event) {
   event.preventDefault();
-  const { elements } = event.target;
-  const value = elements.todoInput.value;
+  const value = todoInput.value;
 
   if (!value) return;
 
   const newTodo = {
+    author: authorInput.value || "Anon",
     completed: false,
     id: crypto.randomUUID(),
     title: value,
+    timestamp: new Date().toLocaleString(),
     userId: 1,
   };
 
